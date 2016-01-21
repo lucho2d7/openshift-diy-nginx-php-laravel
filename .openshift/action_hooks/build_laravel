@@ -1,0 +1,18 @@
+#!/bin/bash
+
+function install_laravel() {
+    mkdir -p ${BUILD_DIR}
+    pushd ${BUILD_DIR}
+    
+    echo "Installing laravel..." 1>&2
+    composer global require "laravel/installer"
+    
+    echo "Creating laravel project..." 1>&2
+    composer create-project --prefer-dist laravel/laravel=5.2 ${BUILD_DIR}
+    mv ${BUILD_DIR}/* ${OPENSHIFT_REPO_DIR}
+    mv ${BUILD_DIR}/.[!.]* ${OPENSHIFT_REPO_DIR}
+
+    echo "Cleaning build directory."
+    popd
+    rm -rf ${BUILD_DIR}
+}
